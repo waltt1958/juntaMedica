@@ -3,7 +3,7 @@
 
 
 <link rel="stylesheet" title="estilos.css" type="text/css" href="estilos.css">
-<title>CONVERSOR ARCHIVOS RAF</title>
+<title>CONVERSOR ARCHIVOS JM</title>
 
 </HEAD>
 
@@ -12,7 +12,7 @@
 <!--#include virtual="/conectar.asp"-->
 
 <H5>Hoy es: <%=weekdayname(weekday(date()))%>, <%=date%></H5>
-<h1>SUC. OCA RAFAELA - PAQUETERIA (Oper. 288140 )</h1>
+<h1>CONVERSOR ARCHIVO TELEGRAMAS DE LA JUNTA MEDICA</h1>
 <br>
 <br>
 <br>
@@ -28,7 +28,7 @@
 if Session("carga")= 1 then
 
 recupera= Session("archivo")
-archivo= "c:\inetpub\wwwroot\conversorRAF\" & recupera
+archivo= "c:\inetpub\wwwroot\juntaMedica\" & recupera
 
 sqlLIMPIA = "DELETE * from sancor"
 conectarOEP.execute sqlLIMPIA

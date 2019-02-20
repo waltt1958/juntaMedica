@@ -3,7 +3,7 @@
 
 <meta charset="utf-8">
 <link rel="stylesheet" title="estilos.css" type="text/css" href="estilos.css">
-<title>CONVERSOR ARCHIVOS RAF</title>
+<title>CONVERSOR ARCHIVOS JM</title>
 
 </HEAD>
 
@@ -11,13 +11,13 @@
 <br>
 
 <H5>Hoy es: <%=weekdayname(weekday(date()))%>, <%=date%></H5>
-<h1>SUC. OCA RAFAELA - PAQUETERIA (Oper. 288140 )</h1>
+<h1>CONVERSOR ARCHIVO TELEGRAMAS DE LA JUNTA MEDICA</h1>
 <br>
 <hr size= 6 color="black"></hr>
 
 <br>
 
-<h3>Recuerde que el archivo que recibió de Sancor lo debe guardar en esta PC. Le será solicitada la ubicación donde lo grabó durante el proceso de conversión</h3>
+<h3>Recuerde que el archivo que recibió de la Junta Medica lo debe guardar en esta PC. Le será solicitada la ubicación donde lo grabó durante el proceso de conversión</h3>
 
 <br>
 
