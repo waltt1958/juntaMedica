@@ -53,10 +53,10 @@ Case 1
       </font></td>
     </tr>
     <tr>
-      <td><strong><font color="black" size="4">Nombre del archivo...</font></strong></td>
+      <td><strong><font color="black" size="4">Nombre del archivo......</font></strong></td>
     </tr>
     <tr>
-      <td><font size="2"><input name="File1" size="100" accept=".txt" type="file"> 
+      <td><font size="2"><input name="File1" size="100" accept=".xls, .xlsx" type="file"> 
       </font></td>
     </tr>
     <tr>

@@ -12,7 +12,7 @@
 <!--#include virtual="/conectar.asp"-->
 
 <H5>Hoy es: <%=weekdayname(weekday(date()))%>, <%=date%></H5>
-<h1>CONVERSOR ARCHIVO TELEGRAMAS DE LA JUNTA MEDICA</h1>
+<h1>CONVERSOR ARCHIVO TELEGRAMAS DE LA JM</h1>
 <br>
 <br>
 <br>
@@ -30,10 +30,10 @@ if Session("carga")= 1 then
 recupera= Session("archivo")
 archivo= "c:\inetpub\wwwroot\juntaMedica\" & recupera
 
-sqlLIMPIA = "DELETE * from sancor"
+sqlLIMPIA = "DELETE * from juntaMedica"
 conectarOEP.execute sqlLIMPIA
 
-sqlBORRA= "DELETE * from copiaSANCOR"
+sqlBORRA= "DELETE * from datosTELEG"
 conectarOEP.execute sqlBORRA
 
 Set objFSO = Server.CreateObject ("Scripting.FileSystemObject")

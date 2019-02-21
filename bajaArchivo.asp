@@ -3,14 +3,14 @@
 
 
 <link rel="stylesheet" title="estilos.css" type="text/css" href="estilos.css">
-<title>CONVERSOR ARCHIVOS RAF</title>
+<title>CONVERSOR ARCHIVOS JM</title>
 
 </HEAD>
 
 <body onload="maximizar()">
 
 <H5>Hoy es: <%=weekdayname(weekday(date()))%>, <%=date%></H5>
-<h1>SUC. OCA RAFAELA - PAQUETERIA (Oper. 288140 )</h1>
+<h1>COVNERSOR ARCHIVOS TELEGRAMA JM</h1>
 <br>
 <br>
 <br>

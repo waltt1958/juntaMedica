@@ -11,7 +11,7 @@
 <br>
 
 <H5>Hoy es: <%=weekdayname(weekday(date()))%>, <%=date%></H5>
-<h1>CONVERSOR ARCHIVO TELEGRAMAS DE LA JUNTA MEDICA</h1>
+<h1>CONVERSOR ARCHIVO TELEGRAMAS JM</h1>
 <br>
 <hr size= 6 color="black"></hr>
 
@@ -31,7 +31,7 @@
 </table>
 
 <%
-texto= "txt"
+bbdd1 = "accdb"
 bbdd= "mdb"
 clasico= "asp"
 forma= "css"
@@ -47,6 +47,8 @@ case bbdd
 case clasico
 case forma
 case imagen
+case bbdd1
+
 case else
 
 objFile.delete
