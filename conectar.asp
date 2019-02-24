@@ -1,4 +1,6 @@
 <%
 set conectarOEP = Server.CreateObject("ADODB.Connection")
-conectarOEP.Open = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=" & Server.MapPath("juntaMedica.accdb")
+response.write ("antesssssssssssssssssssssssssssssssssssssss")
+conectarOEP.Open = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=" & Server.MapPath("juntaMedica.mdb")
+response.write ("despuexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 %>

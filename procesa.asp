@@ -27,94 +27,120 @@
 <%
 if Session("carga")= 1 then
 
-recupera= Session("archivo")
-archivo= "c:\inetpub\wwwroot\juntaMedica\" & recupera
 
-sqlLIMPIA = "DELETE * from juntaMedica"
-conectarOEP.execute sqlLIMPIA
+' recupera= Session("archivo")
+'archivo= "c:\inetpub\wwwroot\juntaMedica\" & recupera
 
-sqlBORRA= "DELETE * from datosTELEG"
-conectarOEP.execute sqlBORRA
+' sqlLIMPIA = "DELETE * from juntaMedica"
+' conectarOEP.execute sqlLIMPIA
 
-Set objFSO = Server.CreateObject ("Scripting.FileSystemObject")
+' sqlBORRA= "DELETE * from datosTELEG"
+' conectarOEP.execute sqlBORRA
 
-Set varArchivo = objFSO.OpenTextFile (archivo,1)
 
-varArchivo.SkipLine
 
-Do while not varArchivo.AtEndOfStream
+' Set ExcelConn = Server.CreateObject("ADODB.Connection")
+' Set ExcelRS = Server.CreateObject("ADODB.Recordset")
+' ExcelConn.Provider = "Microsoft.Jet.OLEDB.4.0"
+' ExcelConn.Properties("Extended Properties").Value = "Excel 8.0"
+' ExcelConn.Open "C:\inetpub\wwwroot\juntaMedica\CITACIONES MARZO 2019.xls"
 
-	 arrayLinea = split (varArchivo.ReadLine, "|", - 1,1)
 
-	sqlinsert= "INSERT INTO sancor (Apellido, Calle, CP, Localidad,Provincia, Operativa, Guia) VALUES ( '" & left(arrayLinea(0),30) & "','" & left(arrayLinea(1),30) & "','" & arrayLinea(2) & "', '"& left(arrayLinea(3),30) & "','" & left(arrayLinea(4),30) & "','" & arrayLinea(5) & "','" & arrayLinea(6) & "')"
+' sSQL = "SELECT * FROM Hoja1$"
+' set ExcelRS = ExcelConn.Execute(sSQL)
+
+
+' Do until ExcelRS.EOF 
+
+' myConn.Execute("INSERT INTO JuntaMedica(Nº, Fecha envío, Fecha JM, Hora, Agente, DNI, Dirección, Localidad, CP, LUGAR PRESENTACION, AREA, Domicilio presentación, Provincia) VALUES ('" & ExcelRS("0") & "', '" & ExcelRS("1") & "','" & ExcelRS("2") & "','" & ExcelRS("4") & "','" & ExcelRS("5") & "','" & ExcelRS("6") & "','" & ExcelRS("7") & "','" & ExcelRS("8") & "','" & ExcelRS("9") & "','" & ExcelRS("10") & "','" & ExcelRS("11") & "','" & ExcelRS("12") & "')")
+' ExcelRS.MoveNext
+
+' Loop
+
+
+
+
+
+
+' Set objFSO = Server.CreateObject ("Scripting.FileSystemObject")
+
+' Set varArchivo = objFSO.OpenTextFile (archivo,1)
+
+' varArchivo.SkipLine
+
+' Do while not varArchivo.AtEndOfStream
+
+	 ' arrayLinea = split (varArchivo.ReadLine, "|", - 1,1)
+
+	' sqlinsert= "INSERT INTO sancor (Apellido, Calle, CP, Localidad,Provincia, Operativa, Guia) VALUES ( '" & left(arrayLinea(0),30) & "','" & left(arrayLinea(1),30) & "','" & arrayLinea(2) & "', '"& left(arrayLinea(3),30) & "','" & left(arrayLinea(4),30) & "','" & arrayLinea(5) & "','" & arrayLinea(6) & "')"
 	 
-	conectarOEP.execute (sqlinsert)
+	' conectarOEP.execute (sqlinsert)
  
-loop 
+' loop 
 	
-Set varArchivo = Nothing
-Set objFSO = Nothing
+' Set varArchivo = Nothing
+' Set objFSO = Nothing
 
-sqlINSERT="INSERT INTO copiaSANCOR select * from sancor"
-conectarOEP.execute sqlINSERT
+' sqlINSERT="INSERT INTO copiaSANCOR select * from sancor"
+' conectarOEP.execute sqlINSERT
 
-sqlACTUALIZA ="UPDATE copiaSANCOR SET copiaSANCOR.RETIdomicilio = 'Independencia', copiaSANCOR.RETInumero = '333', copiaSANCOR.RETIpiso ='0', copiaSANCOR.RETIdepto ='0', copiaSANCOR.RETIcp ='2322', copiaSANCOR.RETIlocalidad = 'Sunchales', copiaSANCOR.RETIprov = 'Santa Fe'"
-conectarOEP.execute sqlACTUALIZA
+' sqlACTUALIZA ="UPDATE copiaSANCOR SET copiaSANCOR.RETIdomicilio = 'Independencia', copiaSANCOR.RETInumero = '333', copiaSANCOR.RETIpiso ='0', copiaSANCOR.RETIdepto ='0', copiaSANCOR.RETIcp ='2322', copiaSANCOR.RETIlocalidad = 'Sunchales', copiaSANCOR.RETIprov = 'Santa Fe'"
+' conectarOEP.execute sqlACTUALIZA
 
- Set rsARCHIVO = Server.CreateObject("ADODB.recordset")
+ ' Set rsARCHIVO = Server.CreateObject("ADODB.recordset")
 
- sqlARCHIVO= "select * from copiaSANCOR"
+ ' sqlARCHIVO= "select * from copiaSANCOR"
 
- rsARCHIVO.open sqlARCHIVO, conectarOEP
+ ' rsARCHIVO.open sqlARCHIVO, conectarOEP
 
- actual= now()
+ ' actual= now()
 
- nombre= "SANCOR " & day(actual) & "-" & month(actual) & "-" & year(actual) & "  "& hour(actual) & "-" & Minute(actual) & "-" & Second(actual) & ".txt"
+ ' nombre= "SANCOR " & day(actual) & "-" & month(actual) & "-" & year(actual) & "  "& hour(actual) & "-" & Minute(actual) & "-" & Second(actual) & ".txt"
  
-  Set fso = Server.CreateObject ("Scripting.FileSystemObject")
+  ' Set fso = Server.CreateObject ("Scripting.FileSystemObject")
 
   'Set arcTEXTO = fso.CreateTextFile(server.mappath("bajaSANCOR.txt"), true)
-  Set arcTEXTO = fso.CreateTextFile(server.mappath(nombre), true)
+  ' Set arcTEXTO = fso.CreateTextFile(server.mappath(nombre), true)
 
-  texto1 = rsARCHIVO.Fields(0).name & "|" & rsARCHIVO.Fields(7).name & "|" & rsARCHIVO.Fields(1).name & "|" & rsARCHIVO.Fields(8).name & "|" & rsARCHIVO.Fields(9).name & "|" & _
-  rsARCHIVO.Fields(10).name & "|" & rsARCHIVO.Fields(2).name & "|" & rsARCHIVO.Fields(3).name & "|" & rsARCHIVO.Fields(4).name & "|" & rsARCHIVO.Fields(11).name & "|" & _
-  rsARCHIVO.Fields(12).name & "|" & rsARCHIVO.Fields(13).name & "|" & rsARCHIVO.Fields(14).name & "|" & rsARCHIVO.Fields(15).name & "|" & rsARCHIVO.Fields(16).name _
-  & "|" & rsARCHIVO.Fields(17).name & "|" & rsARCHIVO.Fields(18).name & "|" & rsARCHIVO.Fields(19).name & "|" & rsARCHIVO.Fields(20).name & "|" & _
-  rsARCHIVO.Fields(21).name & "|" & rsARCHIVO.Fields(22).name & "|" & rsARCHIVO.Fields(23).name & "|" & rsARCHIVO.Fields(24).name & "|" & _
-  rsARCHIVO.Fields(25).name & "|" & rsARCHIVO.Fields(26).name & "|" & rsARCHIVO.Fields(27).name & "|" & rsARCHIVO.Fields(5).name & "|" & rsARCHIVO.Fields(28).name _
-  & "|" & rsARCHIVO.Fields(6).name & "|" & rsARCHIVO.Fields(29).name & "|" & rsARCHIVO.Fields(30).name & "|" & rsARCHIVO.Fields(31).name
+  ' texto1 = rsARCHIVO.Fields(0).name & "|" & rsARCHIVO.Fields(7).name & "|" & rsARCHIVO.Fields(1).name & "|" & rsARCHIVO.Fields(8).name & "|" & rsARCHIVO.Fields(9).name & "|" & _
+  ' rsARCHIVO.Fields(10).name & "|" & rsARCHIVO.Fields(2).name & "|" & rsARCHIVO.Fields(3).name & "|" & rsARCHIVO.Fields(4).name & "|" & rsARCHIVO.Fields(11).name & "|" & _
+  ' rsARCHIVO.Fields(12).name & "|" & rsARCHIVO.Fields(13).name & "|" & rsARCHIVO.Fields(14).name & "|" & rsARCHIVO.Fields(15).name & "|" & rsARCHIVO.Fields(16).name _
+  ' & "|" & rsARCHIVO.Fields(17).name & "|" & rsARCHIVO.Fields(18).name & "|" & rsARCHIVO.Fields(19).name & "|" & rsARCHIVO.Fields(20).name & "|" & _
+  ' rsARCHIVO.Fields(21).name & "|" & rsARCHIVO.Fields(22).name & "|" & rsARCHIVO.Fields(23).name & "|" & rsARCHIVO.Fields(24).name & "|" & _
+  ' rsARCHIVO.Fields(25).name & "|" & rsARCHIVO.Fields(26).name & "|" & rsARCHIVO.Fields(27).name & "|" & rsARCHIVO.Fields(5).name & "|" & rsARCHIVO.Fields(28).name _
+  ' & "|" & rsARCHIVO.Fields(6).name & "|" & rsARCHIVO.Fields(29).name & "|" & rsARCHIVO.Fields(30).name & "|" & rsARCHIVO.Fields(31).name
   
-  arcTEXTO.WriteLine(texto1)
+  ' arcTEXTO.WriteLine(texto1)
  
-  do while not rsARCHIVO.EOF
+  ' do while not rsARCHIVO.EOF
 
-  texto= rsARCHIVO.Fields("Apellido") & "|" & rsARCHIVO("DESTnombre") & "|" & rsARCHIVO("Calle") & "|" & rsARCHIVO("DESTnumero") & "|" & rsARCHIVO("DESTpiso") & "|" & _
-  rsARCHIVO("DESTdepto")  & "|" & rsARCHIVO("CP") & "|" & rsARCHIVO("Localidad") & "|" & rsARCHIVO("Provincia") & "|" & rsARCHIVO("DESTtelefono") & "|" & _
-  rsARCHIVO("DESTemail") & "|" & rsARCHIVO("RETIdomicilio") & "|" & rsARCHIVO("RETInumero") & "|" & rsARCHIVO("RETIpiso") & "|" & rsARCHIVO("RETIdepto") _
-  & "|" & rsARCHIVO("RETItelefono") & "|" & rsARCHIVO("RETIcp") & "|" & rsARCHIVO("RETIlocalidad") & "|" & rsARCHIVO("RETIprov") & "|" & rsARCHIVO("RETIcontacto") _
-  & "|" & rsARCHIVO("PAQpeso") & "|" & rsARCHIVO("PAQalto") & "|" & rsARCHIVO("PAQalto") & "|" & rsARCHIVO("PAQancho") & "|" & rsARCHIVO("PAQvalor") _
-  & "|" & rsARCHIVO("NROremito") & "|" & rsARCHIVO("Operativa") & "|" & rsARCHIVO("IMPremito") & "|" & rsARCHIVO("Guia") & "|" & rsARCHIVO("NROproducto") _
-  & "|" & rsARCHIVO("RETIemail") & "|" & rsARCHIVO("observaciones")
+  ' texto= rsARCHIVO.Fields("Apellido") & "|" & rsARCHIVO("DESTnombre") & "|" & rsARCHIVO("Calle") & "|" & rsARCHIVO("DESTnumero") & "|" & rsARCHIVO("DESTpiso") & "|" & _
+  ' rsARCHIVO("DESTdepto")  & "|" & rsARCHIVO("CP") & "|" & rsARCHIVO("Localidad") & "|" & rsARCHIVO("Provincia") & "|" & rsARCHIVO("DESTtelefono") & "|" & _
+  ' rsARCHIVO("DESTemail") & "|" & rsARCHIVO("RETIdomicilio") & "|" & rsARCHIVO("RETInumero") & "|" & rsARCHIVO("RETIpiso") & "|" & rsARCHIVO("RETIdepto") _
+  ' & "|" & rsARCHIVO("RETItelefono") & "|" & rsARCHIVO("RETIcp") & "|" & rsARCHIVO("RETIlocalidad") & "|" & rsARCHIVO("RETIprov") & "|" & rsARCHIVO("RETIcontacto") _
+  ' & "|" & rsARCHIVO("PAQpeso") & "|" & rsARCHIVO("PAQalto") & "|" & rsARCHIVO("PAQalto") & "|" & rsARCHIVO("PAQancho") & "|" & rsARCHIVO("PAQvalor") _
+  ' & "|" & rsARCHIVO("NROremito") & "|" & rsARCHIVO("Operativa") & "|" & rsARCHIVO("IMPremito") & "|" & rsARCHIVO("Guia") & "|" & rsARCHIVO("NROproducto") _
+  ' & "|" & rsARCHIVO("RETIemail") & "|" & rsARCHIVO("observaciones")
 
-  arcTEXTO.WriteLine(texto)
+  ' arcTEXTO.WriteLine(texto)
 
-  rsARCHIVO.MoveNext
+  ' rsARCHIVO.MoveNext
 
-  loop
+  ' loop
 
- rsARCHIVO.close
- Set rsARCHIVO= nothing
+ ' rsARCHIVO.close
+ ' Set rsARCHIVO= nothing
 	
-  Set fso = nothing
-  Set arcTEXTO = nothing
+  ' Set fso = nothing
+  ' Set arcTEXTO = nothing
 
-sqlLIMPIA = "DELETE * from sancor"
-conectarOEP.execute sqlLIMPIA
+' sqlLIMPIA = "DELETE * from sancor"
+' conectarOEP.execute sqlLIMPIA
 
-sqlBORRA= "DELETE * from copiaSANCOR"
-conectarOEP.execute sqlBORRA
+' sqlBORRA= "DELETE * from copiaSANCOR"
+' conectarOEP.execute sqlBORRA
 
-Session("nombreARC")= nombre
+' Session("nombreARC")= nombre
 
 %>
 
