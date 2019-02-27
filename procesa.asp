@@ -25,94 +25,59 @@
 <br>
 
 <%
+
+
 if Session("carga")= 1 then
 
 
-' recupera= Session("archivo")
-'archivo= "c:\inetpub\wwwroot\juntaMedica\" & recupera
+recupera= Session("archivo")
+archivo= "c:\inetpub\wwwroot\juntaMedica\" & recupera
 
-' sqlLIMPIA = "DELETE * from juntaMedica"
-' conectarOEP.execute sqlLIMPIA
+sqlLIMPIA = "DELETE * from datosJM"
+conectarOEP.execute sqlLIMPIA
 
-' sqlBORRA= "DELETE * from datosTELEG"
-' conectarOEP.execute sqlBORRA
+     Set cn = CreateObject("ADODB.Connection") 
+     Set rs = CreateObject("ADODB.Recordset") 
 
-
-
-' Set ExcelConn = Server.CreateObject("ADODB.Connection")
-' Set ExcelRS = Server.CreateObject("ADODB.Recordset")
-' ExcelConn.Provider = "Microsoft.Jet.OLEDB.4.0"
-' ExcelConn.Properties("Extended Properties").Value = "Excel 8.0"
-' ExcelConn.Open "C:\inetpub\wwwroot\juntaMedica\CITACIONES MARZO 2019.xls"
-
-
-' sSQL = "SELECT * FROM Hoja1$"
-' set ExcelRS = ExcelConn.Execute(sSQL)
-
-
-' Do until ExcelRS.EOF 
-
-' myConn.Execute("INSERT INTO JuntaMedica(Nº, Fecha envío, Fecha JM, Hora, Agente, DNI, Dirección, Localidad, CP, LUGAR PRESENTACION, AREA, Domicilio presentación, Provincia) VALUES ('" & ExcelRS("0") & "', '" & ExcelRS("1") & "','" & ExcelRS("2") & "','" & ExcelRS("4") & "','" & ExcelRS("5") & "','" & ExcelRS("6") & "','" & ExcelRS("7") & "','" & ExcelRS("8") & "','" & ExcelRS("9") & "','" & ExcelRS("10") & "','" & ExcelRS("11") & "','" & ExcelRS("12") & "')")
-' ExcelRS.MoveNext
-
-' Loop
-
-
-
-
-
-
-' Set objFSO = Server.CreateObject ("Scripting.FileSystemObject")
-
-' Set varArchivo = objFSO.OpenTextFile (archivo,1)
-
-' varArchivo.SkipLine
-
-' Do while not varArchivo.AtEndOfStream
-
-	 ' arrayLinea = split (varArchivo.ReadLine, "|", - 1,1)
-
-	' sqlinsert= "INSERT INTO sancor (Apellido, Calle, CP, Localidad,Provincia, Operativa, Guia) VALUES ( '" & left(arrayLinea(0),30) & "','" & left(arrayLinea(1),30) & "','" & arrayLinea(2) & "', '"& left(arrayLinea(3),30) & "','" & left(arrayLinea(4),30) & "','" & arrayLinea(5) & "','" & arrayLinea(6) & "')"
-	 
-	' conectarOEP.execute (sqlinsert)
- 
-' loop 
+     strConnect = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & archivo & " ;Extended Properties='Excel 8.0;HDR=Yes;IMEX=1'" 
+					
+     cn.Open strConnect 
+    strSql = "SELECT * FROM [Hoja1$] " 
+    rs.Open strSql, cn 
 	
-' Set varArchivo = Nothing
-' Set objFSO = Nothing
+	 Do while not rs.EOF 
+	
+		conectarOEP.execute "INSERT INTO datosJM (orden, FechaEnvio, FechaJM, Hora, Agente, DNI, Direccion, Localidad, CP, lugarPRESENTACION, AREA, DomicilioPresentacion, Provincia) VALUES ('"&rs(0)&"','"&rs(1)&"','"&rs(2)&"','"&rs(3)&"','"&rs(4)&"','"&rs(5)&"','"&rs(6)&"','"&rs(7)&"','"&rs(8)&"','"&rs(9)&"','"&rs(10)&"','"&rs(11)&"','"&rs(12)&"')"
+		' sqlINSERT = "INSERT INTO junta (Nº, Fecha envío, Fecha JM, Hora, Agente, DNI, Dirección, Localidad, CP, LUGAR PRESENTACION, AREA, Domicilio presentación, Provincia) VALUES ('" & rs("0") & "', '" & rs("1") & "','" & rs("2") & "','" & rs("3") & "', '" & rs("4") & "','" & rs("5") & "','" & rs("6") & "', '" & rs("7") & "','" & rs("8") & "','" & rs("9") & "', '" & rs("10") & "','" & rs("11") & "','" & rs("12") & "')"
+				
+		 rs.MoveNext 
+      Loop 
 
-' sqlINSERT="INSERT INTO copiaSANCOR select * from sancor"
-' conectarOEP.execute sqlINSERT
+set	rs= nothing
+cn.close
+set cn = nothing
 
-' sqlACTUALIZA ="UPDATE copiaSANCOR SET copiaSANCOR.RETIdomicilio = 'Independencia', copiaSANCOR.RETInumero = '333', copiaSANCOR.RETIpiso ='0', copiaSANCOR.RETIdepto ='0', copiaSANCOR.RETIcp ='2322', copiaSANCOR.RETIlocalidad = 'Sunchales', copiaSANCOR.RETIprov = 'Santa Fe'"
-' conectarOEP.execute sqlACTUALIZA
+
+
+
+
 
  ' Set rsARCHIVO = Server.CreateObject("ADODB.recordset")
 
- ' sqlARCHIVO= "select * from copiaSANCOR"
+ ' sqlARCHIVO= "select * from juntaMedica"
 
  ' rsARCHIVO.open sqlARCHIVO, conectarOEP
 
  ' actual= now()
 
- ' nombre= "SANCOR " & day(actual) & "-" & month(actual) & "-" & year(actual) & "  "& hour(actual) & "-" & Minute(actual) & "-" & Second(actual) & ".txt"
+ ' nombre= "JM " & day(actual) & "-" & month(actual) & "-" & year(actual) & "  "& hour(actual) & "-" & Minute(actual) & "-" & Second(actual) & ".txt"
  
   ' Set fso = Server.CreateObject ("Scripting.FileSystemObject")
 
   'Set arcTEXTO = fso.CreateTextFile(server.mappath("bajaSANCOR.txt"), true)
   ' Set arcTEXTO = fso.CreateTextFile(server.mappath(nombre), true)
 
-  ' texto1 = rsARCHIVO.Fields(0).name & "|" & rsARCHIVO.Fields(7).name & "|" & rsARCHIVO.Fields(1).name & "|" & rsARCHIVO.Fields(8).name & "|" & rsARCHIVO.Fields(9).name & "|" & _
-  ' rsARCHIVO.Fields(10).name & "|" & rsARCHIVO.Fields(2).name & "|" & rsARCHIVO.Fields(3).name & "|" & rsARCHIVO.Fields(4).name & "|" & rsARCHIVO.Fields(11).name & "|" & _
-  ' rsARCHIVO.Fields(12).name & "|" & rsARCHIVO.Fields(13).name & "|" & rsARCHIVO.Fields(14).name & "|" & rsARCHIVO.Fields(15).name & "|" & rsARCHIVO.Fields(16).name _
-  ' & "|" & rsARCHIVO.Fields(17).name & "|" & rsARCHIVO.Fields(18).name & "|" & rsARCHIVO.Fields(19).name & "|" & rsARCHIVO.Fields(20).name & "|" & _
-  ' rsARCHIVO.Fields(21).name & "|" & rsARCHIVO.Fields(22).name & "|" & rsARCHIVO.Fields(23).name & "|" & rsARCHIVO.Fields(24).name & "|" & _
-  ' rsARCHIVO.Fields(25).name & "|" & rsARCHIVO.Fields(26).name & "|" & rsARCHIVO.Fields(27).name & "|" & rsARCHIVO.Fields(5).name & "|" & rsARCHIVO.Fields(28).name _
-  ' & "|" & rsARCHIVO.Fields(6).name & "|" & rsARCHIVO.Fields(29).name & "|" & rsARCHIVO.Fields(30).name & "|" & rsARCHIVO.Fields(31).name
-  
-  ' arcTEXTO.WriteLine(texto1)
- 
-  ' do while not rsARCHIVO.EOF
+   ' do while not rsARCHIVO.EOF
 
   ' texto= rsARCHIVO.Fields("Apellido") & "|" & rsARCHIVO("DESTnombre") & "|" & rsARCHIVO("Calle") & "|" & rsARCHIVO("DESTnumero") & "|" & rsARCHIVO("DESTpiso") & "|" & _
   ' rsARCHIVO("DESTdepto")  & "|" & rsARCHIVO("CP") & "|" & rsARCHIVO("Localidad") & "|" & rsARCHIVO("Provincia") & "|" & rsARCHIVO("DESTtelefono") & "|" & _
@@ -134,11 +99,9 @@ if Session("carga")= 1 then
   ' Set fso = nothing
   ' Set arcTEXTO = nothing
 
-' sqlLIMPIA = "DELETE * from sancor"
+' sqlLIMPIA = "DELETE * from juntaMedica"
 ' conectarOEP.execute sqlLIMPIA
 
-' sqlBORRA= "DELETE * from copiaSANCOR"
-' conectarOEP.execute sqlBORRA
 
 ' Session("nombreARC")= nombre
 

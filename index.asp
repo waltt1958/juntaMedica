@@ -36,6 +36,7 @@ bbdd= "mdb"
 clasico= "asp"
 forma= "css"
 imagen = "png"
+bbdd2 = "ldb"
 
 Set objFSO = server.CreateObject ("Scripting.FileSystemObject")
 set objFolder=objFSO.GetFolder("c:\inetpub\wwwroot\juntaMedica\")
@@ -48,6 +49,7 @@ case clasico
 case forma
 case imagen
 case bbdd1
+case bbdd2
 
 case else
 

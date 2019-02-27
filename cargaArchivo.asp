@@ -44,19 +44,24 @@ Case 1
     </tr>
     <tr>
       <td><h5>Presione el botón "SELECCIONAR ARCHIVO" y elija el archivo que quiere procesar.</h5> <br>
-            <br>
+           
+      </font></td>
+    </tr>
+	   <tr>
+      <td><h3><u>UNICAMENTE ARCHIVOS CUYA EXTENSION SEA</u>:</h3><h3><marquee behavior="alternate"><font color="darkviolet" size="6"> XLS</marquee></h3> <br>
+            
       </font></td>
     </tr>
     <tr>
       <td><font color="black" size="4"><b>Luego pulsa el botón subir.</b><br>
-      <br>
+    
       </font></td>
     </tr>
     <tr>
       <td><strong><font color="black" size="4">Nombre del archivo......</font></strong></td>
     </tr>
     <tr>
-      <td><font size="2"><input name="File1" size="100" accept=".xls, .xlsx" type="file"> 
+      <td><font size="2"><input name="File1" size="100" accept=".xls" type="file"> 
       </font></td>
     </tr>
     <tr>
