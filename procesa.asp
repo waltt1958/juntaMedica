@@ -45,14 +45,14 @@ conectarOEP.execute sqlLIMPIA
     strSql = "SELECT * FROM [Hoja1$] " 
     rs.Open strSql, cn 
 	
-	 Do while not rs.EOF 
+	 Do while not (isnull(rs(0)))
 	
 		conectarOEP.execute "INSERT INTO datosJM (orden, FechaEnvio, FechaJM, Hora, Agente, DNI, Direccion, Localidad, CP, lugarPRESENTACION, AREA, DomicilioPresentacion, Provincia) VALUES ('"&rs(0)&"','"&rs(1)&"','"&rs(2)&"','"&rs(3)&"','"&rs(4)&"','"&rs(5)&"','"&rs(6)&"','"&rs(7)&"','"&rs(8)&"','"&rs(9)&"','"&rs(10)&"','"&rs(11)&"','"&rs(12)&"')"
 		' sqlINSERT = "INSERT INTO junta (Nº, Fecha envío, Fecha JM, Hora, Agente, DNI, Dirección, Localidad, CP, LUGAR PRESENTACION, AREA, Domicilio presentación, Provincia) VALUES ('" & rs("0") & "', '" & rs("1") & "','" & rs("2") & "','" & rs("3") & "', '" & rs("4") & "','" & rs("5") & "','" & rs("6") & "', '" & rs("7") & "','" & rs("8") & "','" & rs("9") & "', '" & rs("10") & "','" & rs("11") & "','" & rs("12") & "')"
 				
 		 rs.MoveNext 
       Loop 
-
+	  
 set	rs= nothing
 cn.close
 set cn = nothing
@@ -62,48 +62,49 @@ set cn = nothing
 
 
 
- ' Set rsARCHIVO = Server.CreateObject("ADODB.recordset")
+Set rsARCHIVO = Server.CreateObject("ADODB.recordset")
 
- ' sqlARCHIVO= "select * from juntaMedica"
+sqlARCHIVO= "select * from datosJM"
 
- ' rsARCHIVO.open sqlARCHIVO, conectarOEP
+rsARCHIVO.open sqlARCHIVO, conectarOEP
 
- ' actual= now()
+actual= now()
 
- ' nombre= "JM " & day(actual) & "-" & month(actual) & "-" & year(actual) & "  "& hour(actual) & "-" & Minute(actual) & "-" & Second(actual) & ".txt"
+nombre= "JM " & day(actual) & "-" & month(actual) & "-" & year(actual) & "  "& hour(actual) & "-" & Minute(actual) & "-" & Second(actual) & ".txt"
  
-  ' Set fso = Server.CreateObject ("Scripting.FileSystemObject")
+Set fso = Server.CreateObject ("Scripting.FileSystemObject")
 
-  'Set arcTEXTO = fso.CreateTextFile(server.mappath("bajaSANCOR.txt"), true)
-  ' Set arcTEXTO = fso.CreateTextFile(server.mappath(nombre), true)
+Set arcTEXTO = fso.CreateTextFile(server.mappath(nombre), true)
 
-   ' do while not rsARCHIVO.EOF
+do while not rsARCHIVO.EOF
 
-  ' texto= rsARCHIVO.Fields("Apellido") & "|" & rsARCHIVO("DESTnombre") & "|" & rsARCHIVO("Calle") & "|" & rsARCHIVO("DESTnumero") & "|" & rsARCHIVO("DESTpiso") & "|" & _
-  ' rsARCHIVO("DESTdepto")  & "|" & rsARCHIVO("CP") & "|" & rsARCHIVO("Localidad") & "|" & rsARCHIVO("Provincia") & "|" & rsARCHIVO("DESTtelefono") & "|" & _
-  ' rsARCHIVO("DESTemail") & "|" & rsARCHIVO("RETIdomicilio") & "|" & rsARCHIVO("RETInumero") & "|" & rsARCHIVO("RETIpiso") & "|" & rsARCHIVO("RETIdepto") _
-  ' & "|" & rsARCHIVO("RETItelefono") & "|" & rsARCHIVO("RETIcp") & "|" & rsARCHIVO("RETIlocalidad") & "|" & rsARCHIVO("RETIprov") & "|" & rsARCHIVO("RETIcontacto") _
-  ' & "|" & rsARCHIVO("PAQpeso") & "|" & rsARCHIVO("PAQalto") & "|" & rsARCHIVO("PAQalto") & "|" & rsARCHIVO("PAQancho") & "|" & rsARCHIVO("PAQvalor") _
-  ' & "|" & rsARCHIVO("NROremito") & "|" & rsARCHIVO("Operativa") & "|" & rsARCHIVO("IMPremito") & "|" & rsARCHIVO("Guia") & "|" & rsARCHIVO("NROproducto") _
-  ' & "|" & rsARCHIVO("RETIemail") & "|" & rsARCHIVO("observaciones")
+   ' texto= """rsARCHIVO.fields("Agente") & "","" & rsARCHIVO.fieds("Direccion") & "","" & " " & "","" & " " & "","" & " " & "|" & " " & "","" & rsARCHIVO.fields("CP") & "","" & rsARCHIVO.fieds("Localidad") & "","" & rsARCHIVO.fieds("lugarPRESENTACION") & "","" & rsARCHIVO.fieds("AREA") & "","" rsARCHIVO.fieds("DomicilioPresentacion") & "","" & rsARCHIVO(12) & "","" & " " & "","" & "<" & "","" & " " & "","" & " " & "","" & " " & """
 
-  ' arcTEXTO.WriteLine(texto)
+   ' arcTEXTO.WriteLine(texto)
 
-  ' rsARCHIVO.MoveNext
+   ' rsARCHIVO.MoveNext
 
-  ' loop
+loop
 
- ' rsARCHIVO.close
- ' Set rsARCHIVO= nothing
+rsARCHIVO.close
+Set rsARCHIVO= nothing
 	
-  ' Set fso = nothing
-  ' Set arcTEXTO = nothing
+Set fso = nothing
+Set arcTEXTO = nothing
 
-' sqlLIMPIA = "DELETE * from juntaMedica"
-' conectarOEP.execute sqlLIMPIA
+Set rsCUENTA = Server.CreateObject("ADODB.recordset")
+sqlCUENTA = "SELECT count(*) as cuenta FROM datosJM"
+rsCUENTA.open sqlCUENTA conectarOEP
 
+Session("cuenta") = rsCUENTA("cuenta")
 
-' Session("nombreARC")= nombre
+Session("nombreARC")= nombre
+
+rsCUENTA.close
+set rsCUENTA = nothing
+
+sqlLIMPIA = "DELETE * from datosJM"
+conectarOEP.execute sqlLIMPIA
 
 %>
 
@@ -119,6 +120,18 @@ response.redirect ("index.asp")
 end if
 
 %>
+
+<table align="center" style="font-size:20px" border="3" cellspacing=0 bordercolor="black" width="55%" height="10%">
+<tr>
+
+<td align="center" bgcolor="#E6E6FA"><b><u>Se generó el archivo: <%=response.write(nombre) %> y contiene <%= response.write(session("cuenta")) %></u></b></td>
+
+</tr>
+</table>
+<br>
+<br>
+
+
 <table align="center">
 <tr>
 <td>
