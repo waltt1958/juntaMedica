@@ -78,11 +78,11 @@ Set arcTEXTO = fso.CreateTextFile(server.mappath(nombre), true)
 
 do while not rsARCHIVO.EOF
 
-   ' texto= """rsARCHIVO.fields("Agente") & "","" & rsARCHIVO.fieds("Direccion") & "","" & " " & "","" & " " & "","" & " " & "|" & " " & "","" & rsARCHIVO.fields("CP") & "","" & rsARCHIVO.fieds("Localidad") & "","" & rsARCHIVO.fieds("lugarPRESENTACION") & "","" & rsARCHIVO.fieds("AREA") & "","" rsARCHIVO.fieds("DomicilioPresentacion") & "","" & rsARCHIVO(12) & "","" & " " & "","" & "<" & "","" & " " & "","" & " " & "","" & " " & """
+    texto= """" & rsARCHIVO.fields("Agente") & """,""" & rsARCHIVO.fields("Direccion") & """,""" & " " & """,""" & " " & """,""" & " " & """,""" & rsARCHIVO.fields("CP") & """,""" & rsARCHIVO.fields("Localidad") & """,""" & rsARCHIVO.fields("lugarPRESENTACION") & """,""" & rsARCHIVO.fields("AREA") & """,""" & rsARCHIVO.fields("DomicilioPresentacion") & """,""" & " " & ""","""& " " & """,""" & "<" & """,""" & " " & """,""" & " " & """,""" & " " & """"
 
-   ' arcTEXTO.WriteLine(texto)
+	arcTEXTO.WriteLine(texto)
 
-   ' rsARCHIVO.MoveNext
+    rsARCHIVO.MoveNext
 
 loop
 
@@ -94,7 +94,7 @@ Set arcTEXTO = nothing
 
 Set rsCUENTA = Server.CreateObject("ADODB.recordset")
 sqlCUENTA = "SELECT count(*) as cuenta FROM datosJM"
-rsCUENTA.open sqlCUENTA conectarOEP
+rsCUENTA.open sqlCUENTA, conectarOEP
 
 Session("cuenta") = rsCUENTA("cuenta")
 
@@ -124,7 +124,7 @@ end if
 <table align="center" style="font-size:20px" border="3" cellspacing=0 bordercolor="black" width="55%" height="10%">
 <tr>
 
-<td align="center" bgcolor="#E6E6FA"><b><u>Se generó el archivo: <%=response.write(nombre) %> y contiene <%= response.write(session("cuenta")) %></u></b></td>
+<td align="center" bgcolor="#E6E6FA"><b><u>Fue generado el archivo: <%=response.write(nombre) %> y contiene <%= response.write(session("cuenta")) %></u></b></td>
 
 </tr>
 </table>
