@@ -48,6 +48,7 @@ conectarOEP.execute sqlLIMPIA
 	 Do while not (isnull(rs(0)))
 	
 		conectarOEP.execute "INSERT INTO datosJM (orden, FechaEnvio, FechaJM, Hora, Agente, DNI, Direccion, Localidad, CP, lugarPRESENTACION, AREA, DomicilioPresentacion, Provincia) VALUES ('"&rs(0)&"','"&rs(1)&"','"&rs(2)&"','"&rs(3)&"','"&rs(4)&"','"&rs(5)&"','"&rs(6)&"','"&rs(7)&"','"&rs(8)&"','"&rs(9)&"','"&rs(10)&"','"&rs(11)&"','"&rs(12)&"')"
+		' sqlINSERT = "INSERT INTO junta (Nº, Fecha envío, Fecha JM, Hora, Agente, DNI, Dirección, Localidad, CP, LUGAR PRESENTACION, AREA, Domicilio presentación, Provincia) VALUES ('" & rs("0") & "', '" & rs("1") & "','" & rs("2") & "','" & rs("3") & "', '" & rs("4") & "','" & rs("5") & "','" & rs("6") & "', '" & rs("7") & "','" & rs("8") & "','" & rs("9") & "', '" & rs("10") & "','" & rs("11") & "','" & rs("12") & "')"
 				
 		 rs.MoveNext 
       Loop 
@@ -56,22 +57,6 @@ set	rs= nothing
 cn.close
 set cn = nothing
 
-' Sacar las comas del campo AGENTE y del campo lugarPRESENTACION
-
-Set rsMODIF = Server.CreateObject("ADODB.recordset")
-
-sqlMODIF= "select * from datosJM"
-
-rsMODIF.open sqlMODIF, conectarOEP
-
-
-
-
-
-
-
-rsMODIF.close
-Set rsMODIF= nothing
 
 
 
@@ -92,6 +77,8 @@ Set fso = Server.CreateObject ("Scripting.FileSystemObject")
 Set arcTEXTO = fso.CreateTextFile(server.mappath(nombre), true)
 
 do while not rsARCHIVO.EOF
+
+    'texto= """" & rsARCHIVO.fields("Agente") & """,""" & rsARCHIVO.fields("Direccion") & """,""" & " " & """,""" & " " & """,""" & " " & """,""" & rsARCHIVO.fields("CP") & """,""" & rsARCHIVO.fields("Localidad") & """,""" & rsARCHIVO.fields("lugarPRESENTACION") & """,""" & rsARCHIVO.fields("AREA") & """,""" & rsARCHIVO.fields("DomicilioPresentacion") & """,""" & " " & ""","""& " " & """,""" & "<" & """,""" & " " & """,""" & " " & """,""" & " " & """"
 
 	texto= """" & rsARCHIVO.fields("Agente") & """,""" & rsARCHIVO.fields("Direccion") & """,""" & " " & """,""" & " " & """,""" & " " & """,""" & rsARCHIVO.fields("CP") & """,""" & rsARCHIVO.fields("Localidad") & """,""" & rsARCHIVO.fields("FechaJM") & """,""" & rsARCHIVO.fields("Hora") & """,""" & rsARCHIVO.fields("lugarPRESENTACION") & """,""" & rsARCHIVO.fields("AREA") & """,""" & rsARCHIVO.fields("DomicilioPresentacion") & " " & rsARCHIVO.fields("Provincia") & """,""" & "<" & """,""" & " " & """,""" & " " & """,""" & " " & """"
 
