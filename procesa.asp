@@ -64,11 +64,70 @@ sqlMODIF= "select * from datosJM"
 
 rsMODIF.open sqlMODIF, conectarOEP
 
+' if not rsMODIF.bof then
+	
+	' rsMODIF.moveFirst
 
+' end if
 
+sustituirPor = " "
 
-
-
+' Do While Not rsMODIF.EOF
+    
+     cadenatexto = rsMODIF.fields("Agente")
+        
+     tamanoCadena = Len(cadenatexto)
+    
+    cadenatexto1 = rsMODIF.fields("Direccion")
+        
+    tamanoCadena1 = Len(cadenatexto1)
+        
+         If tamanoCadena > 0 Then
+			caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+			For i = 1 To tamanoCadena
+			caracterActual = Mid(cadenatexto, i, 1)
+			
+				 If InStr(caracteresValidos, caracterActual) > 0 Then
+					 
+					 cadenaResultado = cadenaResultado & caracterActual
+					 
+				 Else
+					 cadenaResultado = cadenaResultado & sustituirPor
+					 
+					' rs.Edit
+					' rsMODIF.fields("Agente") = cadenaResultado
+					' rs.Update
+				 End If
+			Next
+			
+    ' rs.Edit
+    ' rsMODIF.fields("Agente") = cadenaResultado
+    ' rs.Update
+		' cadenaResultado = ""
+		 End If
+    
+    ' If tamanoCadena1 > 0 Then
+        ' caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+        ' For x = 1 To tamanoCadena1
+        ' caracterActual = Mid(cadenatexto1, x, 1)
+        ' If InStr(caracteresValidos, caracterActual) Then
+            ' cadenaResultado1 = cadenaResultado1 & caracterActual
+        ' Else
+            ' cadenaResultado1 = cadenaResultado1 & sustituirPor
+            ' rs.Edit
+            ' rsMODIF.fields("Direccion") = cadenaResultado1
+            ' rs.Update
+        ' End If
+        ' Next
+    ' rs.Edit
+    ' rsMODIF.fields("Direccion") = cadenaResultado1
+    ' rs.Update
+    ' cadenaResultado1 = ""
+    
+    ' End If
+    ' rs.MoveNext
+    
+' Loop
 
 rsMODIF.close
 Set rsMODIF= nothing
