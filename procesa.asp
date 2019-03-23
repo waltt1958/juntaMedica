@@ -64,19 +64,19 @@ sqlMODIF= "select * from datosJM"
 
 rsMODIF.open sqlMODIF, conectarOEP
 
-' if not rsMODIF.bof then
+if not rsMODIF.bof then
 	
-	' rsMODIF.moveFirst
+	rsMODIF.moveFirst
 
-' end if
+end if
 
 sustituirPor = " "
 
-' Do While Not rsMODIF.EOF
+'Do While Not rsMODIF.EOF
     
-     cadenatexto = rsMODIF.fields("Agente")
+    cadenatexto = rsMODIF.fields("Agente")
         
-     tamanoCadena = Len(cadenatexto)
+    tamanoCadena = Len(cadenatexto)
     
     cadenatexto1 = rsMODIF.fields("Direccion")
         
@@ -127,7 +127,7 @@ sustituirPor = " "
     ' End If
     ' rs.MoveNext
     
-' Loop
+'Loop
 
 rsMODIF.close
 Set rsMODIF= nothing
