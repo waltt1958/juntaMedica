@@ -9,7 +9,7 @@
 
 <body onload="maximizar()">
 
-<!--#include virtual="/conectar.asp"-->
+<!--#include virtual="/juntaMedica/conectar.asp"-->
 
 <H5>Hoy es: <%=weekdayname(weekday(date()))%>, <%=date%></H5>
 <h1>CONVERSOR ARCHIVO TELEGRAMAS DE LA JM</h1>
@@ -28,7 +28,6 @@
 
 
 if Session("carga")= 1 then
-
 
 recupera= Session("archivo")
 archivo= "c:\inetpub\wwwroot\juntaMedica\" & recupera
@@ -64,70 +63,77 @@ sqlMODIF= "select * from datosJM"
 
 rsMODIF.open sqlMODIF, conectarOEP
 
-' if not rsMODIF.bof then
+if not rsMODIF.bof then
 	
-	' rsMODIF.moveFirst
+	rsMODIF.moveFirst
 
-' end if
+end if
 
 sustituirPor = " "
 
-' Do While Not rsMODIF.EOF
+ordenREG = 1
+
+Do While Not rsMODIF.eof
     
      cadenatexto = rsMODIF.fields("Agente")
         
      tamanoCadena = Len(cadenatexto)
     
-    cadenatexto1 = rsMODIF.fields("Direccion")
+    cadenatexto1 = rsMODIF.fields("lugarPRESENTACION")
         
     tamanoCadena1 = Len(cadenatexto1)
-        
-         If tamanoCadena > 0 Then
+	
+        If tamanoCadena > 0 Then
 			caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
 			For i = 1 To tamanoCadena
+			 
 			caracterActual = Mid(cadenatexto, i, 1)
 			
-				 If InStr(caracteresValidos, caracterActual) > 0 Then
+				 If InStr(caracteresValidos, caracterActual)  Then
 					 
 					 cadenaResultado = cadenaResultado & caracterActual
-					 
+
 				 Else
 					 cadenaResultado = cadenaResultado & sustituirPor
-					 
-					' rs.Edit
-					' rsMODIF.fields("Agente") = cadenaResultado
-					' rs.Update
+					 			 
 				 End If
 			Next
+
+			modificaAG= "Update datosJM Set Agente = '" & cadenaResultado & "' where orden  ='" & ordenREG & "'"
+			Set rsAg = conectarOEP.execute(modificaAG)
+			cadenaResultado = ""
 			
-    ' rs.Edit
-    ' rsMODIF.fields("Agente") = cadenaResultado
-    ' rs.Update
-		' cadenaResultado = ""
-		 End If
+		End If
     
-    ' If tamanoCadena1 > 0 Then
-        ' caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
-        ' For x = 1 To tamanoCadena1
-        ' caracterActual = Mid(cadenatexto1, x, 1)
-        ' If InStr(caracteresValidos, caracterActual) Then
-            ' cadenaResultado1 = cadenaResultado1 & caracterActual
-        ' Else
-            ' cadenaResultado1 = cadenaResultado1 & sustituirPor
-            ' rs.Edit
-            ' rsMODIF.fields("Direccion") = cadenaResultado1
-            ' rs.Update
-        ' End If
-        ' Next
-    ' rs.Edit
-    ' rsMODIF.fields("Direccion") = cadenaResultado1
-    ' rs.Update
-    ' cadenaResultado1 = ""
-    
-    ' End If
-    ' rs.MoveNext
-    
-' Loop
+		If tamanoCadena1 > 0 Then
+		
+			caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+		
+			For x = 1 To tamanoCadena1
+			
+			caracterActual = Mid(cadenatexto1, x, 1)
+			
+				If InStr(caracteresValidos, caracterActual) Then
+				
+					cadenaResultado1 = cadenaResultado1 & caracterActual
+				
+				Else
+				
+					cadenaResultado1 = cadenaResultado1 & sustituirPor
+					
+				End If
+			Next
+        
+			modificaDIR= "Update datosJM Set lugarPRESENTACION = '" & cadenaResultado1 & "' where orden  ='" & ordenREG & "'"
+			Set rsDir = conectarOEP.execute(modificaDIR)
+			cadenaResultado1 = ""
+		
+		End If
+		
+	ordenREG = ordenREG + 1
+    rsMODIF.MoveNext
+	     
+Loop
 
 rsMODIF.close
 Set rsMODIF= nothing
@@ -183,7 +189,7 @@ conectarOEP.execute sqlLIMPIA
 
 %>
 
-<!--#include virtual="/desconectar.asp"-->
+<!--#include virtual="/juntaMedica/desconectar.asp"-->
 
 <%
 
@@ -193,6 +199,8 @@ else
 response.redirect ("index.asp")
 
 end if
+
+
 
 %>
 

@@ -40,10 +40,13 @@ Response.ContentType = "application/octet-stream"
 while not objStream.EOS
 	Response.BinaryWrite objStream.Read(1024 * 64)
 Wend
+
 objStream.Close
 Set stream= Nothing
 Response.Flush
 Response.End
+
+
 
 %>
 
