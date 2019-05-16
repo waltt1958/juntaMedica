@@ -9,7 +9,7 @@
 
 <body onload="maximizar()">
 
-<!--#include virtual="/conectar.asp"-->
+<!--#include virtual="/juntaMedica/conectar.asp"-->
 
 <H5>Hoy es: <%=weekdayname(weekday(date()))%>, <%=date%></H5>
 <h1>CONVERSOR ARCHIVO TELEGRAMAS DE LA JM</h1>
@@ -29,7 +29,6 @@
 
 if Session("carga")= 1 then
 
-
 recupera= Session("archivo")
 archivo= "c:\inetpub\wwwroot\juntaMedica\" & recupera
 
@@ -48,18 +47,117 @@ conectarOEP.execute sqlLIMPIA
 	 Do while not (isnull(rs(0)))
 	
 		conectarOEP.execute "INSERT INTO datosJM (orden, FechaEnvio, FechaJM, Hora, Agente, DNI, Direccion, Localidad, CP, lugarPRESENTACION, AREA, DomicilioPresentacion, Provincia) VALUES ('"&rs(0)&"','"&rs(1)&"','"&rs(2)&"','"&rs(3)&"','"&rs(4)&"','"&rs(5)&"','"&rs(6)&"','"&rs(7)&"','"&rs(8)&"','"&rs(9)&"','"&rs(10)&"','"&rs(11)&"','"&rs(12)&"')"
-		' sqlINSERT = "INSERT INTO junta (Nº, Fecha envío, Fecha JM, Hora, Agente, DNI, Dirección, Localidad, CP, LUGAR PRESENTACION, AREA, Domicilio presentación, Provincia) VALUES ('" & rs("0") & "', '" & rs("1") & "','" & rs("2") & "','" & rs("3") & "', '" & rs("4") & "','" & rs("5") & "','" & rs("6") & "', '" & rs("7") & "','" & rs("8") & "','" & rs("9") & "', '" & rs("10") & "','" & rs("11") & "','" & rs("12") & "')"
 				
 		 rs.MoveNext 
       Loop 
+
 	  
 set	rs= nothing
 cn.close
 set cn = nothing
 
+' Sacar las comas del campo AGENTE y del campo lugarPRESENTACION
+
+Set rsMODIF = Server.CreateObject("ADODB.recordset")
+
+sqlMODIF= "select * from datosJM order by ORDEN"
+
+rsMODIF.open sqlMODIF, conectarOEP
+
+if not rsMODIF.bof then
+	
+	rsMODIF.moveFirst
+
+end if
+
+sustituirPor = " "
+
+ordenREG =rsMODIF.fields("ORDEN")
+
+Do While Not rsMODIF.eof
+ 
+
+    cadenatexto1 = rsMODIF.fields("lugarPRESENTACION")
+        
+    tamanoCadena1 = Len(cadenatexto1)
+	
+		If tamanoCadena1 > 0 Then
+		
+			caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+		
+			For x = 1 To tamanoCadena1
+			
+			caracterActual = Mid(cadenatexto1, x, 1)
+			
+				If InStr(caracteresValidos, caracterActual) Then
+				
+					cadenaResultado1 = cadenaResultado1 & caracterActual
+				
+				Else
+				
+					cadenaResultado1 = cadenaResultado1 & sustituirPor
+					
+				End If
+			Next
+        
+			modificaDIR= "Update datosJM Set lugarPRESENTACION = '" & cadenaResultado1 & "' where orden  ='" & ordenREG & "'"
+			
+			Set rsDir = conectarOEP.execute(modificaDIR)
+			cadenaResultado1 = ""
+			ordenREG = ordenREG + 1
+		End If
+		
+    rsMODIF.MoveNext
+	     
+Loop
+
+
+if not rsMODIF.bof then
+	
+	rsMODIF.moveFirst
+
+end if
+
+sustituirPor = " "
+
+ordenREG= rsMODIF.fields("ORDEN")
+Do While Not rsMODIF.eof
+    
+     cadenatexto = rsMODIF.fields("Agente")
+        
+     tamanoCadena = Len(cadenatexto)
+    
+        If tamanoCadena > 0 Then
+			caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+			For i = 1 To tamanoCadena
+			 
+			caracterActual = Mid(cadenatexto, i, 1)
+			
+				 If InStr(caracteresValidos, caracterActual)  Then
+					 
+					 cadenaResultado = cadenaResultado & caracterActual
+
+				 Else
+					 cadenaResultado = cadenaResultado & sustituirPor
+					 			 
+				 End If
+			Next
+
+			modificaAG= "Update datosJM Set Agente = '" & cadenaResultado & "' where orden  ='" & ordenREG & "'"
+			
+			Set rsAg = conectarOEP.execute(modificaAG)
+			cadenaResultado = ""
+			ordenREG = ordenREG + 1
+		End If
+ 
+    rsMODIF.MoveNext
+
+Loop
 
 
 
+rsMODIF.close
+Set rsMODIF= nothing
 
 
 Set rsARCHIVO = Server.CreateObject("ADODB.recordset")
@@ -77,8 +175,6 @@ Set fso = Server.CreateObject ("Scripting.FileSystemObject")
 Set arcTEXTO = fso.CreateTextFile(server.mappath(nombre), true)
 
 do while not rsARCHIVO.EOF
-
-    'texto= """" & rsARCHIVO.fields("Agente") & """,""" & rsARCHIVO.fields("Direccion") & """,""" & " " & """,""" & " " & """,""" & " " & """,""" & rsARCHIVO.fields("CP") & """,""" & rsARCHIVO.fields("Localidad") & """,""" & rsARCHIVO.fields("lugarPRESENTACION") & """,""" & rsARCHIVO.fields("AREA") & """,""" & rsARCHIVO.fields("DomicilioPresentacion") & """,""" & " " & ""","""& " " & """,""" & "<" & """,""" & " " & """,""" & " " & """,""" & " " & """"
 
 	texto= """" & rsARCHIVO.fields("Agente") & """,""" & rsARCHIVO.fields("Direccion") & """,""" & " " & """,""" & " " & """,""" & " " & """,""" & rsARCHIVO.fields("CP") & """,""" & rsARCHIVO.fields("Localidad") & """,""" & rsARCHIVO.fields("FechaJM") & """,""" & rsARCHIVO.fields("Hora") & """,""" & rsARCHIVO.fields("lugarPRESENTACION") & """,""" & rsARCHIVO.fields("AREA") & """,""" & rsARCHIVO.fields("DomicilioPresentacion") & " " & rsARCHIVO.fields("Provincia") & """,""" & "<" & """,""" & " " & """,""" & " " & """,""" & " " & """"
 
@@ -111,7 +207,7 @@ conectarOEP.execute sqlLIMPIA
 
 %>
 
-<!--#include virtual="/desconectar.asp"-->
+<!--#include virtual="/juntaMedica/desconectar.asp"-->
 
 <%
 
@@ -121,6 +217,8 @@ else
 response.redirect ("index.asp")
 
 end if
+
+
 
 %>
 

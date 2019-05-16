@@ -50,7 +50,6 @@ conectarOEP.execute sqlLIMPIA
 				
 		 rs.MoveNext 
       Loop 
-
 	  
 set	rs= nothing
 cn.close
@@ -72,15 +71,40 @@ end if
 
 sustituirPor = " "
 
-ordenREG =rsMODIF.fields("ORDEN")
+ordenREG = 1
 
 Do While Not rsMODIF.eof
- 
-
+    
+     cadenatexto = rsMODIF.fields("Agente")
+        
+     tamanoCadena = Len(cadenatexto)
+    
     cadenatexto1 = rsMODIF.fields("lugarPRESENTACION")
         
     tamanoCadena1 = Len(cadenatexto1)
 	
+        If tamanoCadena > 0 Then
+			caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+			For i = 1 To tamanoCadena
+			 
+			caracterActual = Mid(cadenatexto, i, 1)
+			
+				 If InStr(caracteresValidos, caracterActual)  Then
+					 
+					 cadenaResultado = cadenaResultado & caracterActual
+
+				 Else
+					 cadenaResultado = cadenaResultado & sustituirPor
+					 			 
+				 End If
+			Next
+
+			modificaAG= "Update datosJM Set Agente = '" & cadenaResultado & "' where orden  ='" & ordenREG & "'"
+			Set rsAg = conectarOEP.execute(modificaAG)
+			cadenaResultado = ""
+			
+		End If
+    
 		If tamanoCadena1 > 0 Then
 		
 			caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
@@ -100,67 +124,22 @@ Do While Not rsMODIF.eof
 				End If
 			Next
         
-			'modificaDIR= "Update datosJM Set lugarPRESENTACION = '" & cadenaResultado1 & "' where orden  ='" & ordenREG & "'"
-			modificaDIR = "Update datosJM Set orden = '" & ordenREG & "', FechaEnvio = '" & rsMODIF.fields("FechaEnvio") & "',fechaJM = '" & rsMODIF.fields("fechaJM") & "', Hora = '" & rsMODIF.fields("Hora") & "', Agente = '" & rsMODIF.fields("Agente") & "', DNI = '" & rsMODIF.fields("DNI") & "', Direccion = '" & rsMODIF.fields("Direccion") & "', Localidad = '" & rsMODIF.fields("Localidad") & "', CP = '" & rsMODIF.fields("CP") & "', lugarPRESENTACION = '" & cadenaResultado1 & "', Area = '" & rsMODIF.fields("Area") & "', DomicilioPresentacion = '" & rsMODIF.fields("DomicilioPresentacion") & "', Provincia = '" & rsMODIF.fields("Provincia") & "' where orden  ='" & ordenREG & "'" 
-			
+			modificaDIR= "Update datosJM Set lugarPRESENTACION = '" & cadenaResultado1 & "' where orden  ='" & ordenREG & "'"
 			Set rsDir = conectarOEP.execute(modificaDIR)
 			cadenaResultado1 = ""
-			ordenREG = ordenREG + 1
+		
 		End If
 		
+	ordenREG = ordenREG + 1
     rsMODIF.MoveNext
 	     
 Loop
 
-
-if not rsMODIF.bof then
-	
-	rsMODIF.moveFirst
-
-end if
-
-sustituirPor = " "
-
-ordenREG= rsMODIF.fields("ORDEN")
-Do While Not rsMODIF.eof
- 
-     cadenatexto = rsMODIF.fields("Agente")
-        
-     tamanoCadena = Len(cadenatexto)
-    
-        If tamanoCadena > 0 Then
-			caracteresValidos = " 0123456789abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
-			For i = 1 To tamanoCadena
-			 
-			caracterActual = Mid(cadenatexto, i, 1)
-			
-				 If InStr(caracteresValidos, caracterActual)  Then
-					 
-					 cadenaResultado = cadenaResultado & caracterActual
-
-				 Else
-					 cadenaResultado = cadenaResultado & sustituirPor
-					 			 
-				 End If
-			Next
-
-			'modificaAG= "Update datosJM Set Agente = '" & cadenaResultado & "' where orden  ='" & ordenREG & "'"
-			modificaAG = "Update datosJM Set orden = '" & ordenREG & "', FechaEnvio = '" & rsMODIF.fields("FechaEnvio") & "',fechaJM = '" & rsMODIF.fields("fechaJM") & "', Hora = '" & rsMODIF.fields("Hora") & "', Agente = '" & cadenaResultado & "', DNI = '" & rsMODIF.fields("DNI") & "', Direccion = '" & rsMODIF.fields("Direccion") & "', Localidad = '" & rsMODIF.fields("Localidad") & "', CP = '" & rsMODIF.fields("CP") & "', lugarPRESENTACION = '" & rsMODIF.fields("lugarPRESENTACION") & "', Area = '" & rsMODIF.fields("Area") & "', DomicilioPresentacion = '" & rsMODIF.fields("DomicilioPresentacion") & "', Provincia = '" & rsMODIF.fields("Provincia") & "' where orden  ='" & ordenREG & "'" 
-
-			
-			Set rsAg = conectarOEP.execute(modificaAG)
-			cadenaResultado = ""
-			ordenREG = ordenREG + 1
-		End If
- 
-    rsMODIF.MoveNext
-
-Loop
-
-
-
 rsMODIF.close
 Set rsMODIF= nothing
+
+
+
 
 
 Set rsARCHIVO = Server.CreateObject("ADODB.recordset")
